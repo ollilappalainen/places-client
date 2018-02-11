@@ -7,16 +7,20 @@ module.exports = {
       filename: './dist/bundle.js'
   },
   module: {
-      loaders: [
-          {
-              test: /\.js$/,
-              loader: 'babel-loader',
-              query: {
-                presets: ['es2015']
-              },
-              exclude: /node_modules/
-          }
-      ]
+    // loaders: [
+    //     {
+    //         test: /\.js$/,
+    //         loader: 'babel-loader',
+    //         query: {
+    //         presets: ['es2015']
+    //         },
+    //         exclude: /node_modules/
+    //     }
+    // ],
+    rules: [
+        { test: /\.js$/, loader: 'babel-loader', query: {presets: ['es2015']}, exclude: /node_modules/ },
+        { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
+    ]
   },
   stats: {
     colors: true

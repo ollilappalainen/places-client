@@ -28,6 +28,10 @@
   },
   "homepage": "https://github.com/ollilappalainen/places-client#readme",
   "dependencies": {
+    "css-loader": "^0.28.9",
+    "less": "^3.0.0",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.20.1",
     "webpack": "^3.11.0"
   },
   "devDependencies": {
