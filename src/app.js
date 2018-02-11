@@ -34,7 +34,9 @@ class Map {
     map.addListener('click', (e) => {
       addMarker(e.latLng, map);
     });
-  }
+  }  
 }
+
+window.initMap();
 
 Map.main();
