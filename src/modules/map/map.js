@@ -1,5 +1,9 @@
+import MapController from './map-controller';
+
 export default class Map {  
-  constructor() { }
+  constructor() {
+    this.mapController = new MapController();
+  }  
 
   initMap() {
     const hki = {lat: 60.192059, lng: 24.945831};
@@ -7,16 +11,19 @@ export default class Map {
       zoom: 14,
       center: hki
     });
-    const marker = new google.maps.Marker({
-      position: hki,
-      map: map
-    });
+
+    
+    // const marker = new google.maps.Marker({
+    //   position: hki,
+    //   map: map
+    // });
   
     map.addListener('click', (e) => {
-      addMarker(e.latLng, map);
+      this.mapController.addMarker(e.latLng, map);
+      //addMarker(e.latLng, map);
     });
-  };
-
+  }
+  
   addMarker(latLng, map) {
     const marker = new google.maps.Marker({
       position: latLng,
