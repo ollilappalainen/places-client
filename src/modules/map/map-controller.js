@@ -5,9 +5,10 @@ export default class MapController {
     this.placesService = new PlacesService();
   }
 
-  addMarker(position, map, center) {
+  addMarker(position, map, label, description, center) {
     const marker = new google.maps.Marker({
       position: position,
+      label: label,
       map: map
     });
 
@@ -15,31 +16,27 @@ export default class MapController {
     return marker;
   }
 
-  async loadMarkers(places, map, center) {
-    const markerPlaces = await places;
-    if (markerPlaces.length > 0) {
-      markerPlaces.map((place) => {
-        console.log(place);
-        const position = {lat: parseInt(place.geometry_lat), lng: parseInt(place.geometry_lng)};
-        const marker = this.addMarker(position, map);
-        return marker;
-      });
-    }
+  async loadMarkers(places, map, center) {    
+    const markerPlaces = await places;    
+    await markerPlaces.map(async (place) => {
+      const position = {lat: parseFloat(place.geometry_lat), lng: parseFloat(place.geometry_lng)};
+      const marker = this.addMarker(position, map, place.title, null, false);
+      return marker;
+    });
   }
 
   async saveMarker(position) {
     const place = {  
       title: 'Testi',    
       description: 'Testi',
-      geometry_lat: position.lat,
-      geometry_lng: position.lng,
+      geometry_lat: position.lat(),
+      geometry_lng: position.lng(),
       is_favorite: false,
       opening: '08:00:00',
       closing: '11:00:00'
     }
 
     const postPlace = await this.placesService.postPlace(place);
-    console.log(postPlace);
     return postPlace;
   }
 }

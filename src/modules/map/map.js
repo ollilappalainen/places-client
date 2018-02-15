@@ -16,9 +16,8 @@ export default class Map {
     });
 
     map.addListener('click', (e) => {
-      this.mapController.addMarker(e.latLng, map, true);
+      this.mapController.addMarker(e.latLng, map, null, null, true);
       this.mapController.saveMarker(e.latLng);
-      console.log(e);
     });
 
     this.mapController.loadMarkers(this.places, map, false);
