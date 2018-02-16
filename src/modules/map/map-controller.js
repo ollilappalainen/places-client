@@ -1,42 +1,38 @@
 import PlacesService from '../../services/places-service';
+import PlaceContentWindow from './add-content-info/add-content-info';
+import ContentInfo from "./open-content-info/open-content-info";
 
 export default class MapController {
   constructor() {
-    this.placesService = new PlacesService();
+    this.placesService = new PlacesService();    
   }
 
-  addMarker(position, map, label, description, center) {
+  addMarker(position, map, label, description, isClicked) {
     const marker = new google.maps.Marker({
+      title: label,
       position: position,
-      label: label,
       map: map
     });
 
-    center ? map.panTo(position) : null;    
+    if (isClicked) {
+      const newContent = new PlaceContentWindow();
+      map.panTo(position);
+      newContent.addPlaceInfo(map, marker);
+    }
+
     return marker;
   }
 
-  async loadMarkers(places, map, center) {    
+  async loadMarkers(places, map, center) {        
     const markerPlaces = await places;    
     await markerPlaces.map(async (place) => {
+      const contentWindow = new ContentInfo();
       const position = {lat: parseFloat(place.geometry_lat), lng: parseFloat(place.geometry_lng)};
       const marker = this.addMarker(position, map, place.title, null, false);
+      marker.addListener('click', () => {
+        contentWindow.openContentInfo(map, marker, place);
+      })
       return marker;
     });
-  }
-
-  async saveMarker(position) {
-    const place = {  
-      title: 'Testi',    
-      description: 'Testi',
-      geometry_lat: position.lat(),
-      geometry_lng: position.lng(),
-      is_favorite: false,
-      opening: '08:00:00',
-      closing: '11:00:00'
-    }
-
-    const postPlace = await this.placesService.postPlace(place);
-    return postPlace;
   }
 }
