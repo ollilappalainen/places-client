@@ -3,10 +3,11 @@ import PlacesService from "../../../services/places-service";
 export default class PlaceContentWindow {
   constructor() {
     this.placesService = new PlacesService();
-  }
-  addPlaceInfo(map, marker) {
-    this.hideShowContentElement();
-    const contentWindowElement = document.getElementById('content-info-window');
+    this.recentMarker;
+  }  
+
+  addPlaceInfo(map, marker) {     
+    const contentWindowElement = document.getElementById('add-content-info');
     const contentWindow = new google.maps.InfoWindow({
       content: contentWindowElement
     }); 
@@ -18,7 +19,7 @@ export default class PlaceContentWindow {
       });
 
     });
-
+    
     return contentWindow.open(map, marker);
   }
 
@@ -40,12 +41,5 @@ export default class PlaceContentWindow {
 
     const postPlace = await this.placesService.postPlace(place);
     return postPlace;
-  }
-
-  hideShowContentElement() {
-    const addElement = document.getElementById('add-content-info');
-    const showElement = document.getElementById('show-content-info');
-    addElement.classList.contains('hide') ? addElement.classList.remove('hide') : null;
-    showElement.classList.contains('hide') ? null : showElement.classList.add('hide');
   }
 }

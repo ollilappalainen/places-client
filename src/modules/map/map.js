@@ -1,11 +1,15 @@
 import MapController from './map-controller';
 import PlacesService from '../../services/places-service';
+import PlacesList from "./places-list/places-list";
 
 export default class Map {  
   constructor() {
     this.mapController = new MapController();
     this.placesService = new PlacesService();
+    this.placesList = new PlacesList();
     this.places = this.placesService.getPlaces();
+    this.sideMenu = document.getElementById('all-places');
+    this.renderSideMenuItems(this.sideMenu, this.places);
   }  
 
   initMap() {
@@ -20,5 +24,13 @@ export default class Map {
     });
 
     this.mapController.loadMarkers(this.places, map, false);
+  }
+
+  async renderSideMenuItems(element, items) {
+    const itemsForRender = await items;
+    const menuElements = this.placesList.renderPlaces(itemsForRender);
+    menuElements.map((menuElement) => {
+      element.appendChild(menuElement);
+    });
   }
 }

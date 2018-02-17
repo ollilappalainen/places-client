@@ -2,8 +2,6 @@ export default class ContentInfo {
   constructor() { }
 
   openContentInfo(map, marker, place) {
-    
-    this.hideAddContentElement();
 
     document.getElementById('show-place-label').innerHTML = place.title; 
     document.getElementById('show-place-desc').innerHTML = place.description;
@@ -13,18 +11,11 @@ export default class ContentInfo {
     document.getElementById('show-place-opening').innerHTML = place.opening;
     document.getElementById('show-place-closing').innerHTML = place.closing; 
 
-    const content = document.getElementById('content-info-window');
+    const content = document.getElementById('show-content-info');
     const infoWindow = new google.maps.InfoWindow({
       content: content
     }); 
     
     return infoWindow.open(map, marker);
-  }
-
-  hideAddContentElement() {
-    const addElement = document.getElementById('add-content-info');
-    const showElement = document.getElementById('show-content-info');
-    addElement.classList.contains('hide') ? null : addElement.classList.add('hide');
-    showElement.classList.contains('hide') ? showElement.classList.remove('hide') : null;
   }
 }

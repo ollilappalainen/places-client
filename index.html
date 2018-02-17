@@ -9,94 +9,103 @@
 </head>
 <body>
   <div id="app">
+    <div id="places-list">
+      <div id="favorites">
+        <div><h3>Favorites</h3></div>
+        <div class="favorites-list">
+          
+        </div> 
+      </div>
+      <div id="all-places">
+        <h3>Places</h3>
+      </div>
+    </div>
     <div id="map"></div>
-    <div id="content-info-window">
-      <div id="add-content-info" class="content-info-wrapper">
-        <div class="content-info-header header">
-          <h2 class="label">Add place information</h2>  
-        </div>                
-        <div class="content-info-label">
-          <p>Label:</p>
-          <input id="place-label" class="content-info-input input-width-350" type="text" name="place-label">
+    <div id="add-content-info" class="content-info-wrapper">
+      <div class="content-info-header header">
+        <h2 class="label">Add place information</h2>  
+      </div>                
+      <div class="content-info-label">
+        <p>Label:</p>
+        <input id="place-label" class="content-info-input input-width-350" type="text" name="place-label">
+      </div>
+      <div class="content-info-desc">
+        <p>Description:</p>
+        <textarea id="place-description" class="content-info-input input-width-350" type="text" name="place-description" rows="5"></textarea>
+      </div>
+      <div class="content-info-hours">
+        <div>
+          <p>Opens:</p>
+          <input id="place-opening" class="content-info-input" type="time" name="place-opens">
+        </div>          
+        <div>
+          <p>Closes:</p>
+          <input id="place-closing" class="content-info-input" type="time" name="place-closes">
+        </div>          
+      </div>
+      <div class="content-info-geo">
+        <div>
+          <p>Latitude:</p>  
+          <input id="place-lat" class="content-info-input" type="number" name="place-lat">
         </div>
-        <div class="content-info-desc">
-          <p>Description:</p>
-          <textarea id="place-description" class="content-info-input input-width-350" type="text" name="place-description" rows="5"></textarea>
+        <div>
+          <p>Longitude:</p>
+          <input id="place-lng" class="content-info-input" type="number" name="place-lng">  
+        </div>                    
+      </div>
+      <div class="content-info-fav">
+        <div>
+          <p>Add to favorites:</p>
         </div>
-        <div class="content-info-hours">
-          <div>
-            <p>Opens:</p>
-            <input id="place-opening" class="content-info-input" type="time" name="place-opens">
-          </div>          
-          <div>
-            <p>Closes:</p>
-            <input id="place-closing" class="content-info-input" type="time" name="place-closes">
-          </div>          
+        <div>
+          <input id="place-fav" type="checkbox">
+        </div>                    
+      </div>
+      <div class="content-info-buttons">
+          <button id="btn-save-place">Save</button>
+          <button id="btn-delete-place">Delete</button>
+      </div>
+    </div>
+
+    <div id="show-content-info" class="show-content-info-wrapper">
+      <div class="show-content-info-label">
+        <h2 id="show-place-label"></h2>
+      </div>
+      <div class="show-content-info-hours">
+        <div><p class="content-label">Open</p></div>
+        <div>
+          <p id="show-place-opening"></p>
         </div>
-        <div class="content-info-geo">
-          <div>
-            <p>Latitude:</p>  
-            <input id="place-lat" class="content-info-input" type="number" name="place-lat">
-          </div>
-          <div>
-            <p>Longitude:</p>
-            <input id="place-lng" class="content-info-input" type="number" name="place-lng">  
-          </div>                    
+        <div><p>-</p></div>
+        <div>
+          <p id="show-place-closing"></p>
         </div>
-        <div class="content-info-fav">
-          <div>
-            <p>Add to favorites:</p>
-          </div>
-          <div>
-            <input id="place-fav" type="checkbox">
-          </div>                    
+      </div>      
+      <div class="show-content-info-geo">          
+        <div>
+          <p class="content-label">Latitude, Longitude:</p>
         </div>
-        <div class="content-info-buttons">
-            <button id="btn-save-place">Save</button>
-            <button id="btn-delete-place">Delete</button>
+        <div>            
+          <p id="show-place-lat"></p>
+        </div>
+        <div>            
+          <p id="show-place-lng"></p>
         </div>
       </div>
-
-      <div id="show-content-info" class="show-content-info-wrapper">
-        <div class="show-content-info-label">
-          <h2 id="show-place-label"></h2>
-        </div>
-        <div class="show-content-info-hours">
-          <div><p class="content-label">Open</p></div>
-          <div>
-            <p id="show-place-opening"></p>
-          </div>
-          <div><p>-</p></div>
-          <div>
-            <p id="show-place-closing"></p>
-          </div>
-        </div>      
-        <div class="show-content-info-geo">          
-          <div>
-            <p class="content-label">Latitude, Longitude:</p>
-          </div>
-          <div>            
-            <p id="show-place-lat"></p>
-          </div>
-          <div>            
-            <p id="show-place-lng"></p>
-          </div>
-        </div>
-        <div class="show-content-info-desc">
-          <p id="show-place-desc"></p>
-        </div>
-        <div class="show-content-info-fav">
-          <div>
-            <p class="content-label">Favorite:</p>
-          </div> 
-          <div>
-            <input id="show-place-fav" type="checkbox" disabled>
-          </div>                   
-        </div>        
-        <div class="show-content-info-buttons">
-          <button id="btn-place-edit">Edit</button>
-          <button id="btn-place-delete">Delete</button>
-        </div>
+      <div class="show-content-info-desc">
+        <p id="show-place-desc"></p>
+      </div>
+      <div class="show-content-info-fav">
+        <div>
+          <p class="content-label">Favorite:</p>
+        </div> 
+        <div>
+          <input id="show-place-fav" type="checkbox" disabled>
+        </div>                   
+      </div>        
+      <div class="show-content-info-buttons">
+        <button id="btn-place-edit">Edit</button>
+        <button id="btn-place-delete">Delete</button>
       </div>
     </div>
   </div>

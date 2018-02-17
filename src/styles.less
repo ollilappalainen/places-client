@@ -8,6 +8,22 @@ body {
   margin: 0;
 }
 
+#app {
+  display: grid;
+  grid-template-columns: repeat(6,1fr);  
+
+  #places-list {
+    grid-row: 1;
+    grid-column: 1;
+    width: 300px;
+  }
+  #map {
+    grid-row: 1;
+    grid-column: 2;
+    grid-auto-columns: max;
+  }
+}
+
 #map {
   width: 100%;
   height: 100vh;
@@ -21,7 +37,7 @@ body {
   border-color: @highlightColor;
 }
 
-.content-info-wrapper {  
+.content-info-wrapper { 
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   width: 370px;
