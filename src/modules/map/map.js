@@ -9,7 +9,7 @@ export default class Map {
     this.placesList = new PlacesList();
     this.places = this.placesService.getPlaces();
     this.sideMenu = document.getElementById('all-places');
-    this.renderSideMenuItems(this.sideMenu, this.places);
+    //this.renderSideMenuItems(this.sideMenu, this.places);
   }  
 
   initMap() {
@@ -26,11 +26,11 @@ export default class Map {
     this.mapController.loadMarkers(this.places, map, false);
   }
 
-  async renderSideMenuItems(element, items) {
-    const itemsForRender = await items;
-    const menuElements = this.placesList.renderPlaces(itemsForRender);
-    menuElements.map((menuElement) => {
-      element.appendChild(menuElement);
-    });
-  }
+  // async renderSideMenuItems(element, items) {
+  //   const itemsForRender = await items;
+  //   const menuElements = this.placesList.renderPlaces(itemsForRender);
+  //   menuElements.map((menuElement) => {
+  //     element.appendChild(menuElement);
+  //   });
+  // }
 }
