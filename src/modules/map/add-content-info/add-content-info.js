@@ -8,13 +8,14 @@ export default class PlaceContentWindow {
 
   addPlaceInfo(map, marker) {         
     const contentWindow = this.createContentInfo(); 
-
-    document.getElementById('btn-save-place').addEventListener('click', (e) => {
-      const save = this.saveMarker(marker.position);
-      save.then(() => {
-        contentWindow.close(map, marker);
+    
+    google.maps.event.addListener(contentWindow, 'domready', function() {
+      const saveBtn = document.getElementById('btn-save-place').addEventListener('click', (e) => {
+        const save = this.saveMarker(marker.position);
+        save.then(() => {
+          contentWindow.close(map, marker);
+        });
       });
-
     });
     
     return contentWindow.open(map, marker);
@@ -41,50 +42,50 @@ export default class PlaceContentWindow {
   }
 
   createContentInfo() {
-    const contentHtml = '<div id="add-content-info" class="content-info-wrapper">'
-      +'<div class="content-info-header header">'
-        +'<h2 class="label">Add place information</h2>'
-      +'</div>'         
-      +'<div class="content-info-label">'
-        +'<p>Label:</p>'
-        +'<input id="place-label" class="content-info-input input-width-350" type="text" name="place-label">'
-      +'</div>'
-      +'<div class="content-info-desc">'
-        +'<p>Description:</p>'
-        +'<textarea id="place-description" class="content-info-input input-width-350" type="text" name="place-description" rows="5"></textarea>'
-      +'</div>'
-      +'<div class="content-info-hours">'
-        +'<div>'
-          +'<p>Opens:</p>'
-          +'<input id="place-opening" class="content-info-input" type="time" name="place-opens">'
-        +'</div>'          
-        +'<div>'
-          +'<p>Closes:</p>'
-          +'<input id="place-closing" class="content-info-input" type="time" name="place-closes">'
-        +'</div>'          
-      +'</div>'
-      +'<div class="content-info-geo">'
-        +'<div>'
-          +'<p>Latitude:</p>'  
-          +'<input id="place-lat" class="content-info-input" type="number" name="place-lat">'
-        +'<div>'
-          +'<p>Longitude:</p>'
-          +'<input id="place-lng" class="content-info-input" type="number" name="place-lng">'  
-        +'</div>'                    
-      +'</div>'
-      +'<div class="content-info-fav">'
-        +'<div>'
-          +'<p>Add to favorites:</p>'
-        +'</div>'
-        +'<div>'
-          +'<input id="place-fav" type="checkbox">'
-        +'</div>'                    
-      +'</div>'
-      +'<div class="content-info-buttons">'
-          +'<button id="btn-save-place">Save</button>'
-          +'<button id="btn-delete-place">Delete</button>'
-      +'</div>'
-    +'</div>';
+    const contentHtml = `<div id="add-content-info" class="content-info-wrapper">
+      <div class="content-info-header header">
+        <h2 class="label">Add place information</h2>
+      </div>         
+      <div class="content-info-label">
+        <p>Label:</p>
+        <input id="place-label" class="content-info-input input-width-350" type="text" name="place-label">
+      </div>
+      <div class="content-info-desc">
+        <p>Description:</p>
+        <textarea id="place-description" class="content-info-input input-width-350" type="text" name="place-description" rows="5"></textarea>
+      </div>
+      <div class="content-info-hours">
+        <div>
+          <p>Opens:</p>
+          <input id="place-opening" class="content-info-input" type="time" name="place-opens">
+        </div>          
+        <div>
+          <p>Closes:</p>
+          <input id="place-closing" class="content-info-input" type="time" name="place-closes">
+        </div>          
+      </div>
+      <div class="content-info-geo">
+        <div>
+          <p>Latitude:</p>  
+          <input id="place-lat" class="content-info-input" type="number" name="place-lat">
+        <div>
+          <p>Longitude:</p>
+          <input id="place-lng" class="content-info-input" type="number" name="place-lng">  
+        </div>                    
+      </div>
+      <div class="content-info-fav">
+        <div>
+          <p>Add to favorites:</p>
+        </div>
+        <div>
+          <input id="place-fav" type="checkbox">
+        </div>                    
+      </div>
+      <div class="content-info-buttons">
+          <button id="btn-save-place">Save</button>
+          <button id="btn-delete-place">Delete</button>
+      </div>
+    </div>`;
 
     const contentWindow = new google.maps.InfoWindow({
       content: contentHtml

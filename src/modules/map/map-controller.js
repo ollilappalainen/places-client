@@ -30,8 +30,9 @@ export default class MapController {
       const position = {lat: parseFloat(place.geometry_lat), lng: parseFloat(place.geometry_lng)};
       const marker = this.addMarker(position, map, place.title, null, false);
       marker.addListener('click', () => {
-        contentWindow.openContentInfo(map, marker, place);
-      })
+        contentWindow.openContentInfo(place).open(map, marker);
+      });
+
       return marker;
     });
   }
