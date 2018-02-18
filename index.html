@@ -8,17 +8,40 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAub_fvMVVHw1VsW1XNpGpFOCtlktsxa6A"></script>
 </head>
 <body>
-  <div id="app">
-    <div id="places-list">
-      <div id="favorites">
-        <div><h3>Favorites</h3></div>
-        <div class="favorites-list"></div> 
+  <div id="app" class="grid-wrapper">
+    <div id="places-list" class="side-menu grid-side-menu">
+      <div class="menu-header">
+        <p>Amazing Places</p>
       </div>
-      <div id="all-places">
-        <h3>Places</h3>
+      <div id="search-and-filter-places">
+        <div id="search-places" class="search-and-filter">
+          <div>
+            <div><p>Search by title</p></div>            
+            <div><input type="text" name="search-places" id="filter-by-title"></div>
+          </div>            
+          <div class="filter">                
+            <div><p>Show open only</p></div>  
+            <div><input type="checkbox" name="cb-filter-open" id="filter-by-open"></div>              
+          </div>
+        </div>
+        <div id="filter-places">          
+          
+        </div>        
+      </div>
+      <div id="favorites-wrapper">
+        <div class="label">
+          <p>Favorites</p>
+        </div>
+        <div id="favorite-places" class="favorites-list"></div> 
+      </div>
+      <div id="all-places-wrapper">
+        <div class="label">
+          <p>All places</p>
+        </div>
+        <div id="all-places" class="menu-list"></div>
       </div>
     </div>
-    <div id="map"></div>
+    <div id="map" class="grid-map"></div>
   </div>
   <script src="dist/bundle.js"></script>  
 </body>

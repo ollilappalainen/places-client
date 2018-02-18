@@ -1,4 +1,4 @@
-import PlacesService from "../../../services/places-service";
+import PlacesService from "../../services/places-service";
 
 export default class PlaceContentWindow {
   constructor() {
@@ -7,13 +7,15 @@ export default class PlaceContentWindow {
   }  
 
   addPlaceInfo(map, marker) {         
+    let self = this;
     const contentWindow = this.createContentInfo(); 
     
-    google.maps.event.addListener(contentWindow, 'domready', function() {
+    google.maps.event.addListener(contentWindow, 'domready', function() {      
       const saveBtn = document.getElementById('btn-save-place').addEventListener('click', (e) => {
-        const save = this.saveMarker(marker.position);
+        const save = self.saveMarker(marker.position);
         save.then(() => {
           contentWindow.close(map, marker);
+          alert('Place saved successfully');
         });
       });
     });
@@ -78,7 +80,7 @@ export default class PlaceContentWindow {
           <p>Add to favorites:</p>
         </div>
         <div>
-          <input id="place-fav" type="checkbox">
+          <input id="place-fav" class="check-box" type="checkbox">
         </div>                    
       </div>
       <div class="content-info-buttons">

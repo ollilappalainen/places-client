@@ -32,7 +32,8 @@
     "less": "^3.0.0",
     "less-loader": "^4.0.5",
     "style-loader": "^0.20.1",
-    "webpack": "^3.11.0"
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

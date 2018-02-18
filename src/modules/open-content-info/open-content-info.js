@@ -1,8 +1,13 @@
+import PlacesService from '../../services/places-service';
+
 export default class ContentInfo {
-  constructor() { }
+  constructor() {
+    this.placesService = new PlacesService();
+  }
 
   openContentInfo(place) {
     const infoWindow = this.createInfoWindow();
+    const self = this;
 
     google.maps.event.addListener(infoWindow, 'domready', function() {
       document.getElementById('show-place-label').innerHTML = place.title; 
@@ -12,6 +17,15 @@ export default class ContentInfo {
       document.getElementById('show-place-fav').checked = place.is_favorite;
       document.getElementById('show-place-opening').innerHTML = place.opening;
       document.getElementById('show-place-closing').innerHTML = place.closing; 
+
+      const deleteBtn = document.getElementById('btn-place-delete');
+      deleteBtn.addEventListener('click', () => {
+        const deleteOpened = self.deletePlace(place.id);
+        deleteOpened.then(() => {
+          infoWindow.close();
+          alert('Place deleted');
+        });
+      });
     });
 
     return infoWindow;
@@ -65,5 +79,10 @@ export default class ContentInfo {
     });
 
     return infoWindow;
+  }
+
+  async deletePlace(id) {
+    const deletePlace = await this.placesService.deletePlace(id);
+    return deletePlace;
   }
 }
