@@ -3,11 +3,12 @@ export default class Filter {
     const titleValue = filterByTitleEl.value;
     const openValue = filterByOpenEl.checked; 
     const favVal = filterFavEl.checked;
+    const places = await placesWithMarkers;
     let filteredPlaces;
 
     switch (openValue) {
       case true:
-        filteredPlaces = this.filterOpen(placesWithMarkers);
+        filteredPlaces = this.filterOpen(places);
         if (titleValue !== '' || titleValue !== null) {
           filteredPlaces = this.filterByTitle(filteredPlaces, titleValue);
         }
@@ -16,7 +17,7 @@ export default class Filter {
         }
         break;
       case false:
-        filteredPlaces = await this.filterByTitle(placesWithMarkers, titleValue);
+        filteredPlaces = await this.filterByTitle(places, titleValue);
         if (favVal) {
           filteredPlaces = await this.filterFavorites(filteredPlaces);
         }

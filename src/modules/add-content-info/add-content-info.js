@@ -23,6 +23,7 @@ export default class PlaceContentWindow {
     const contentWindow = this.createContentInfo(); 
     const place = placeWithMarker.place;
     const marker = placeWithMarker.marker;
+    const filterInput = document.getElementById('refresh-page');
 
     google.maps.event.addListener(contentWindow, 'domready', (e) => {
       this.loadContent(place);
@@ -32,9 +33,8 @@ export default class PlaceContentWindow {
           contentWindow.close(map, marker);
           marker.setMap(null);
           marker.setMap(map);
-          const filterInput = document.getElementById('refresh-page');
-          console.log(filterInput);
           filterInput.click();
+          console.log(filterInput);
           alert('Place saved successfully');
         });
       });
@@ -86,7 +86,8 @@ export default class PlaceContentWindow {
     return updatePlace;
   }
 
-  addPlaceInfo(map, marker) {         
+  addPlaceInfo(map, marker) {  
+    let saved = false;       
     let self = this;
     const contentWindow = this.createContentInfo(); 
     
@@ -95,9 +96,16 @@ export default class PlaceContentWindow {
         const save = self.saveMarker(marker.position);
         save.then(() => {
           contentWindow.close(map, marker);
+          saved = true;
           alert('Place saved successfully');
         });
       });
+    });
+
+    google.maps.event.addListener(contentWindow,'closeclick',function(){
+      if (!saved) {
+        marker.setMap(null);
+      }    
     });
     
     return contentWindow.open(map, marker);
@@ -126,7 +134,7 @@ export default class PlaceContentWindow {
   createContentInfo() {
     const contentHtml = `<div id="add-content-info" class="content-info-wrapper">
       <div class="content-info-header header">
-        <h2 class="label">Add place information</h2>
+        <h2 id="info-box-label">PLACE INFO</h2>
       </div>         
       <div class="content-info-label">
         <p>Label:</p>

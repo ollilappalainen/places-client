@@ -71,33 +71,34 @@ export default class App {
   handleSearchPress() {
     let keyPress = document.getElementById('filter-by-title');
     keyPress.addEventListener('keyup', (e) => {
-      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+      this.reloadMakers(false);
     });
 
     let openPress = document.getElementById('filter-by-open');
     openPress.addEventListener('change', (e) => {
-      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+      this.reloadMakers(false);
     });
 
     let favoritesPress = document.getElementById('filter-favorites');
     favoritesPress.addEventListener('change', (e) => {
-      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+      this.reloadMakers(false);
     });
 
     let refreshBtn = document.getElementById('refresh-page');
     refreshBtn.addEventListener('click', (e) => {
-      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+      this.reloadMakers(true);
     });
   }
 
-  async reloadMakers() {
+  async reloadMakers(ifPlaceUpdated) {    
     const map = this.map;
     const menu = this.menu;
     const favMenu = this.favoritesMenu; 
     const filterByTitle = document.getElementById('filter-by-title');
     const filterByOpen = document.getElementById('filter-by-open');   
-    const filterFavorites = document.getElementById('filter-favorites');   
-    const places = this.placesWithMarkers;
+    const filterFavorites = document.getElementById('filter-favorites'); 
+    this.placesWithMarkers = ifPlaceUpdated ? this.populatePlacesWithMarkers(map) : this.placesWithMarkers;  
+    const places = await this.placesWithMarkers;
     const filteredPlaces = await this.filter.filterPlacesAndMarkers(places, filterByTitle, filterByOpen, filterFavorites); 
     console.log(filteredPlaces);   
     this.mapController.removeMarkers(places);

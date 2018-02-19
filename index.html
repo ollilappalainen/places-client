@@ -11,14 +11,14 @@
   <div id="app" class="grid-wrapper">
     <div id="places-list" class="side-menu grid-side-menu">
       <div class="menu-header">
-        <p>Amazing Places</p>
+        <p>PLACES</p>
       </div>
       <div id="search-and-filter-places">
         <div id="search-places" class="search-and-filter">
           <div>
             <div><p>Search by title</p></div>            
-            <div><input type="text" name="search-places" id="filter-by-title"></div>
-            <button id="refresh-page" class="hide"></button>
+            <div><input type="text" name="search-places" id="filter-by-title" class="input-field"></div>
+            <button id="refresh-page" class="hide">Refresh</button>
           </div>            
           <div class="filter">                
             <div><p>Show open only</p></div>  
@@ -27,20 +27,14 @@
             <div><input type="checkbox" name="cb-filter-fav" id="filter-favorites"></div>             
           </div>
         </div>
-        <div id="filter-places">          
-          
-        </div>        
+        <div id="filter-places"></div>        
       </div>
-      <div id="favorites-wrapper">
-        <div class="label">
-          <p>Favorites</p>
-        </div>
+      <div id="favorites-wrapper" class="places-list">
+        <div class="label"><p>Favorites</p></div>
         <div id="favorite-places" class="favorites-list"></div> 
       </div>
       <div id="all-places-wrapper">
-        <div class="label">
-          <p>All places</p>
-        </div>
+        <div class="label"><p>All places</p></div>
         <div id="all-places" class="menu-list"></div>
       </div>
     </div>
