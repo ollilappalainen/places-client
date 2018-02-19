@@ -4,7 +4,7 @@ import Filter from './modules/filter/filter';
 import PlacesList from "./modules/places-list/places-list";
 import MapController from './modules/map-controller';
 
-class App {
+export default class App {
   constructor() {
     this.filter = new Filter();
     this.placesService = new PlacesService();  
@@ -13,10 +13,11 @@ class App {
     this.menu = document.getElementById('all-places');
     this.favoritesMenu = document.getElementById('favorite-places');
     this.filterByTitle = document.getElementById('filter-by-title');
-    this.filterByOpen = document.getElementById('filter-by-open');    
+    this.filterByOpen = document.getElementById('filter-by-open');  
+    this.filterFav = document.getElementById('filter-favorites');  
     this.map;
     this.placesWithMarkers = this.populatePlacesWithMarkers();
-    this.filteredPlacesWithMarkers = this.filter.filterPlacesAndMarkers(this.placesWithMarkers, this.filterByTitle, this.filterByOpen);
+    this.filteredPlacesWithMarkers = this.filter.filterPlacesAndMarkers(this.placesWithMarkers, this.filterByTitle, this.filterByOpen, this.filterFav);
 
     this.renderPage();
   }
@@ -24,14 +25,14 @@ class App {
   initMap() {
     const mapEl = document.getElementById('map');
     const options = {
-      zoom: 14,
+      zoom: 8,
       center: {lat: 60.192059, lng: 24.945831}
     };
 
     this.map = new google.maps.Map(mapEl, options);
 
     this.map.addListener('click', (e) => {
-      this.mapController.addMarker(e.latLng, this.map, null, null, true);      
+      this.mapController.addMarker(e.latLng, this.map, null);      
     });
   }
 
@@ -63,10 +64,51 @@ class App {
     this.initMap(this.mapEl);
     const map = this.map;
     this.sideMenu.renderSideMenu(menu, favMenu, places, map);
+    this.handleSearchPress();
     this.mapController.loadMarkers(places, map);
   }
 
-  
+  handleSearchPress() {
+    let keyPress = document.getElementById('filter-by-title');
+    keyPress.addEventListener('keyup', (e) => {
+      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+    });
+
+    let openPress = document.getElementById('filter-by-open');
+    openPress.addEventListener('change', (e) => {
+      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+    });
+
+    let favoritesPress = document.getElementById('filter-favorites');
+    favoritesPress.addEventListener('change', (e) => {
+      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+    });
+
+    let refreshBtn = document.getElementById('refresh-page');
+    refreshBtn.addEventListener('click', (e) => {
+      this.reloadMakers(this.map, this.menu, this.placesWithMarkers);
+    });
+  }
+
+  async reloadMakers() {
+    const map = this.map;
+    const menu = this.menu;
+    const favMenu = this.favoritesMenu; 
+    const filterByTitle = document.getElementById('filter-by-title');
+    const filterByOpen = document.getElementById('filter-by-open');   
+    const filterFavorites = document.getElementById('filter-favorites');   
+    const places = this.placesWithMarkers;
+    const filteredPlaces = await this.filter.filterPlacesAndMarkers(places, filterByTitle, filterByOpen, filterFavorites); 
+    console.log(filteredPlaces);   
+    this.mapController.removeMarkers(places);
+    let favorites = document.getElementById('favorites-ul');
+    let allPlaces = document.getElementById('all-places-ul');
+    favorites.remove();
+    allPlaces.remove();
+
+    this.sideMenu.renderSideMenu(menu, favMenu, filteredPlaces, map);
+    this.mapController.loadMarkers(filteredPlaces, map);
+  } 
 }
 
 new App();

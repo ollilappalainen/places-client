@@ -12,6 +12,7 @@ export default class PlacesList {
   async renderPlaces(places) {    
     places = await places;
     let elementList = document.createElement('ul');
+    elementList.setAttribute('id', 'all-places-ul');
 
     /**
      * create list items, add element id = place database id, append class
@@ -52,6 +53,7 @@ export default class PlacesList {
   async renderFavorites(places) {
     places = await places;
     let elementList = document.createElement('ul');
+    elementList.setAttribute('id', 'favorites-ul');
 
     /** 
      * Check if place has is_favorite value of 'true'

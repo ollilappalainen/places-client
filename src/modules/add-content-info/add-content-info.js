@@ -1,16 +1,96 @@
 import PlacesService from "../../services/places-service";
+import App from '../../app';
 
 export default class PlaceContentWindow {
   constructor() {
     this.placesService = new PlacesService();
-    this.recentMarker;
-  }  
+  } 
+  
+  loadContent(place) {
+    console.log('asdasd', place);
+    console.log(document.getElementById('place-label'));
+    document.getElementById('place-label').value = place.title; 
+    document.getElementById('place-description').value = place.description;
+    document.getElementById('place-lat').value = place.geometry_lat;
+    document.getElementById('place-lng').value = place.geometry_lng;      
+    document.getElementById('place-fav').checked = place.is_favorite;
+    document.getElementById('place-opening').value = place.opening;
+    document.getElementById('place-closing').value = place.closing; 
+  }
+
+  updatePlaceInfo(map, placeWithMarker) {
+    const self = this;
+    const contentWindow = this.createContentInfo(); 
+    const place = placeWithMarker.place;
+    const marker = placeWithMarker.marker;
+
+    google.maps.event.addListener(contentWindow, 'domready', (e) => {
+      this.loadContent(place);
+      const saveBtn = document.getElementById('btn-save-place').addEventListener('click', (e) => {
+        const update = self.updateMarker(place.id, marker.position);
+        update.then(() => {
+          contentWindow.close(map, marker);
+          marker.setMap(null);
+          marker.setMap(map);
+          const filterInput = document.getElementById('refresh-page');
+          console.log(filterInput);
+          filterInput.click();
+          alert('Place saved successfully');
+        });
+      });
+
+      const deleteBtn = document.getElementById('btn-delete-place');
+      deleteBtn.addEventListener('click', () => {
+        const deleteOpened = self.deletePlace(place.id);
+        deleteOpened.then(() => {
+          contentWindow.close();
+          marker.setMap(null);
+          alert('Place deleted');
+        });
+      });
+    });
+
+    return contentWindow.open(map, marker);
+  }
+
+  triggerEvent(el, type){
+    if ('createEvent' in document) {      
+      const e = document.createEvent('HTMLEvents');
+      e.initEvent(type, false, true);
+      el.dispatchEvent(e);
+    }
+  }
+
+  async deletePlace(id) {
+    const deletePlace = await this.placesService.deletePlace(id);
+    return deletePlace;
+  }
+
+  async updateMarker(id, position) {
+    const geometry = {
+      lat: document.getElementById('place-lat').value,
+      lng: document.getElementById('place-lng').value
+    }
+
+    const place = {  
+      title: document.getElementById('place-label').value,    
+      description: document.getElementById('place-description').value,
+      geometry_lat: geometry.lat ? geometry.lat : position.lat(),
+      geometry_lng: geometry.lng ? geometry.lng : position.lng(),
+      is_favorite: document.getElementById('place-fav').checked,
+      opening: document.getElementById('place-opening').value,
+      closing: document.getElementById('place-closing').value
+    }
+
+    const updatePlace = await this.placesService.updatePlace(place, id);
+    return updatePlace;
+  }
 
   addPlaceInfo(map, marker) {         
     let self = this;
     const contentWindow = this.createContentInfo(); 
     
-    google.maps.event.addListener(contentWindow, 'domready', function() {      
+    google.maps.event.addListener(contentWindow, 'domready', (e) => { 
       const saveBtn = document.getElementById('btn-save-place').addEventListener('click', (e) => {
         const save = self.saveMarker(marker.position);
         save.then(() => {

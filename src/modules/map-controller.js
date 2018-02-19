@@ -1,24 +1,21 @@
 import PlacesService from '../services/places-service';
 import PlaceContentWindow from './add-content-info/add-content-info';
-import ContentInfo from "./open-content-info/open-content-info";
 
 export default class MapController {
   constructor() {  
   }
 
-  addMarker(position, map, label, description, isClicked) {
+  addMarker(position, map, label) {
     const marker = new google.maps.Marker({
       title: label,
       position: position,
       map: map
     });
 
-    if (isClicked) {
-      const newContent = new PlaceContentWindow();
-      map.panTo(position);
-      newContent.addPlaceInfo(map, marker);
-    }
-
+    const newContent = new PlaceContentWindow();
+    map.panTo(position);
+    newContent.addPlaceInfo(map, marker);
+    
     return marker;
   }
 
@@ -27,27 +24,38 @@ export default class MapController {
     map = await map;
     let markers = [];   
     await places.map(async (pm) => {
-      const contentWindow = new ContentInfo();
-      const position = {lat: parseFloat(pm.place.geometry_lat), lng: parseFloat(pm.place.geometry_lng)};
-      const marker = this.addMarker(position, map, pm.place.title, null, false);      
-      marker.addListener('click', () => {
-        contentWindow.openContentInfo(pm.place).open(map, marker);
-      });
+      const contentWindow = new PlaceContentWindow();
+      const position = {lat: parseFloat(pm.place.geometry_lat), lng: parseFloat(pm.place.geometry_lng)};                 
       
-      markers.push(marker);
+      pm.marker.addListener('click', () => {
+        contentWindow.updatePlaceInfo(map, pm);      
+      });
+
+      const waitToLookCool = Math.floor((Math.random() * 400) + 100);
+      setTimeout(() => {
+        const marker = pm.marker.setMap(map);
+        markers.push(marker);
+      }, waitToLookCool);            
     });
 
     return markers;
   }
 
-  async panToPlace(placeId, places, map) {
-    const contentWindow = new ContentInfo(); 
+  async removeMarkers(places) {
+    places = await places;
+    places.map((pm) => {
+      pm.marker.setMap(null);
+    });
+  }
+
+  async panToPlace(placeId, places, map) {    
     const pannedPlace = await places.map((pm) => {  
       if (parseInt(placeId) === parseInt(pm.place.id)) {
         const position = {lat: parseFloat(pm.place.geometry_lat), lng: parseFloat(pm.place.geometry_lng)};
 
         map.panTo(position);         
-        contentWindow.openContentInfo(pm.place).open(map, pm.marker);
+        const contentWindow = new PlaceContentWindow(); 
+        contentWindow.updatePlaceInfo(map, pm);
       }
     }); 
     

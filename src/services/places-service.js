@@ -1,7 +1,7 @@
 export default class PlacesService {
   constructor() {
-    this.apiUrl = 'http://127.0.0.1:8000/api/';
-    //this.apiUrl = 'https://places-app-phpapi.herokuapp.com/api/';
+    //this.apiUrl = 'http://127.0.0.1:8000/api/';
+    this.apiUrl = 'https://places-app-phpapi.herokuapp.com/api/';
   }
 
   async getPlaces() {
@@ -37,9 +37,15 @@ export default class PlacesService {
     const updateUrl = this.apiUrl + 'places/' + id;
     const response = await fetch(updateUrl, {
       method: 'PUT',
-      body: place
+      body: JSON.stringify(place),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
     }).then((res) => {
       return res;
+    }).then((data) => {
+      console.log(data);
     });
   }
 }

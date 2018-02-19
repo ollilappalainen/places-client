@@ -1,25 +1,48 @@
 export default class Filter {
-  filterPlacesAndMarkers(placesWithMarkers, filterByTitleEl, filterByOpenEl) {    
+  async filterPlacesAndMarkers(placesWithMarkers, filterByTitleEl, filterByOpenEl, filterFavEl) {    
     const titleValue = filterByTitleEl.value;
-    const openValue = filterByOpenEl.value;    
+    const openValue = filterByOpenEl.checked; 
+    const favVal = filterFavEl.checked;
     let filteredPlaces;
-  
-    if (openValue === true) {
-      filteredPlaces = this.filterOpen(placesWithMarkers);
-      if (titleValue !== '' || titleValue !== null) {
-        filteredPlaces = this.filterByTitle(filteredPlaces, titleValue);
-      }
-    } else {
-      filteredPlaces = placesWithMarkers;
+
+    switch (openValue) {
+      case true:
+        filteredPlaces = this.filterOpen(placesWithMarkers);
+        if (titleValue !== '' || titleValue !== null) {
+          filteredPlaces = this.filterByTitle(filteredPlaces, titleValue);
+        }
+        if (favVal) {
+          filteredPlaces = await this.filterFavorites(filteredPlaces);
+        }
+        break;
+      case false:
+        filteredPlaces = await this.filterByTitle(placesWithMarkers, titleValue);
+        if (favVal) {
+          filteredPlaces = await this.filterFavorites(filteredPlaces);
+        }
+        break;
     }
+
     
     return filteredPlaces;
   }
-  
-  filterOpen (placesWithMarkers) {
+
+  async filterFavorites(placesWithMarkers) {
     let filteredPlaces = [];
+    const places = await placesWithMarkers;
+
+    filteredPlaces = places.filter(pm => {
+      return pm.place.is_favorite === true;
+    });
+
+    return filteredPlaces;
+  }
   
-    filteredPlaces = placesWithMarkers.filter(pm => {
+  async filterOpen (placesWithMarkers) {
+    let filteredPlaces = [];
+    const places = await placesWithMarkers;
+
+    filteredPlaces = places.filter(pm => {
       const now = Date.now();
       const opening = this.parseTime(pm.place.opening);
       const closing = this.parseTime(pm.place.closing);
@@ -29,15 +52,20 @@ export default class Filter {
     return filteredPlaces;
   }
   
-  filterByTitle(placesWithMarkers, titleToSearch) {
+  async filterByTitle(placesWithMarkers, titleToSearch) {
     let filteredPlaces = [];
+    const places = await placesWithMarkers;
+
+    if (titleToSearch === null || titleToSearch === '') {
+      filteredPlaces = await placesWithMarkers;      
+    } else {
+      filteredPlaces = places.filter((pm) => {
+        const searchValue = titleToSearch.toUpperCase().trim();
+        const placeTitle = pm.place.title.toUpperCase().trim();
     
-    filteredPlaces = placesWithMarkers.filter((pm) => {
-      const searchValue = titleToSearch.toUpperCase().trim();
-      const placeTitle = pm.place.title.toUpperCase().trim();
-  
-      return searchValue === placeTitle;
-    });
+        return placeTitle.includes(searchValue);
+      });
+    }    
   
     return filteredPlaces;
   }
