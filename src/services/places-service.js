@@ -1,7 +1,11 @@
 export default class PlacesService {
   constructor() {
-    this.apiUrl = 'http://127.0.0.1:8000/api/';
-    //this.apiUrl = 'https://places-app-phpapi.herokuapp.com/api/';
+    console.log(window.origin);
+    if (window.origin === 'http://localhost:8080') {
+      this.apiUrl = 'http://127.0.0.1:8000/api/';
+    } else {
+      this.apiUrl = 'https://places-app-phpapi.herokuapp.com/api/';
+    }    
   }
 
   async getPlaces() {

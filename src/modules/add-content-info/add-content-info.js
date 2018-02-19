@@ -45,6 +45,7 @@ export default class PlaceContentWindow {
         deleteOpened.then(() => {
           contentWindow.close();
           marker.setMap(null);
+          filterInput.click();
           alert('Place deleted');
         });
       });
@@ -90,6 +91,7 @@ export default class PlaceContentWindow {
     let saved = false;       
     let self = this;
     const contentWindow = this.createContentInfo(); 
+    const filterInput = document.getElementById('refresh-page');
     
     google.maps.event.addListener(contentWindow, 'domready', (e) => { 
       const saveBtn = document.getElementById('btn-save-place').addEventListener('click', (e) => {
@@ -97,8 +99,15 @@ export default class PlaceContentWindow {
         save.then(() => {
           contentWindow.close(map, marker);
           saved = true;
+          filterInput.click();
           alert('Place saved successfully');
         });
+      });
+
+      const deleteBtn = document.getElementById('btn-delete-place');
+      deleteBtn.addEventListener('click', () => {
+        contentWindow.close();
+        marker.setMap(null);
       });
     });
 
